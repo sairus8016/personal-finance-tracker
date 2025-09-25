@@ -43,24 +43,28 @@ function App() {
   //   });
   // }, []);
 
-  useEffect(() => {
-    fetch(`http://localhost:5001/api/budget/${budgetId}`)
-      .then(response => response.json())
-      .then((json: Budget) => {
-        console.log("Fetched budget data:", json);
-        setBudget(json);
-        setLoading(false);
-    })
-    .catch((err) => {
+  async function fetchBudget() {
+    try {
+      setLoading(true);
+      const response = await fetch(`http://localhost:5001/api/budget/${budgetId}`);
+      const json: Budget = await response.json();
+      console.log("Fetched budget data:", json);
+      setBudget(json);
+    } catch (err) {
       console.error("Failed to fetch budget data:", err);
+    } finally {
       setLoading(false);
-    });
+    }
+  }
+
+  useEffect(() => {
+    fetchBudget();
   }, []);
 
   return (
     <div className="App">
       {budget ? (
-        <BudgetType budgetId={budgetId} incomeStreams={budget.incomeStreams} expenses={budget.expenses} />
+        <BudgetType budgetId={budgetId} incomeStreams={budget.incomeStreams} expenses={budget.expenses} onRefresh={fetchBudget} />
       ): (
         <div>{loading ? "Loading..." : "Failed to load budget data."}</div>
       )}

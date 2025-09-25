@@ -35,10 +35,10 @@ type BudgetProps = {
   budgetId: string;
   incomeStreams: IncomeStreamProps[];
   expenses: ExpenseProps[];
-  onExpenseAdded?: () => void; // optional callback to refresh the list after adding
+  onRefresh?: () => void; // optional callback to refresh the list after adding
 };
 
-const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onExpenseAdded }) => {
+const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onRefresh }) => {
 
   const [newExpenseName, setNewExpenseName] = useState("");
   const [newExpenseValue, setNewExpenseValue] = useState("");
@@ -58,20 +58,20 @@ const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onEx
     if (!newExpenseName.trim()) return;
 
     try {
-      const response = await fetch(`/api/expenses`, {
+      const response = await fetch(`http://localhost:5001/api/expenses`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: newExpenseName,
-          amount: 0, // you can extend this later for user input
+          amount: newExpenseValue, // you can extend this later for user input
           budgetId,
         }),
       });
 
       if (!response.ok) throw new Error("Failed to create expense");
 
-      setNewExpenseName(""); // clear textbox
-      if (onExpenseAdded) onExpenseAdded(); // let parent refresh expense list
+      setNewExpenseName(""); setNewExpenseValue(""); // clear textboxes
+      if (onRefresh) onRefresh(); // let parent refresh expense list
     } catch (err) {
       console.error(err);
     }

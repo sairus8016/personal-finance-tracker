@@ -72,4 +72,23 @@ router.get('/budget', async (req: Request, res: Response) => {
     }
 });
 
+// POST /api/expenses
+router.post("/expenses", async (req, res) => {
+  try {
+    const { name, amount, budgetId } = req.body;
+
+    if (!name || !budgetId) {
+      return res.status(400).json({ message: "Name and budgetId are required" });
+    }
+
+    const expense = new ExpenseModel({ name, amount, budgetId });
+    const savedExpense = await expense.save();
+
+    res.status(201).json(savedExpense);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 export default router;
