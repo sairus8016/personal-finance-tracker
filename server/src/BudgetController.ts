@@ -91,4 +91,26 @@ router.post("/expenses", async (req, res) => {
   }
 });
 
+// POST /api/expenseDelete
+router.post("/expenseDelete", async (req, res) => {
+  try {
+    const { expenseId } = req.body;
+
+    if (!expenseId) {
+      return res.status(400).json({ message: "Missing expenseId" });
+    }
+
+    const deletedExpense = await ExpenseModel.findByIdAndDelete(expenseId);
+
+    if (!deletedExpense) {
+      return res.status(404).json({ message: "Expense not found" });
+    }
+
+    res.status(200).json({ message: "Expense deleted", deletedExpense });
+  } catch (err) {
+    console.error("Error deleting expense:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 export default router;

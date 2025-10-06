@@ -10,7 +10,7 @@ interface IncomeStreamProps {
 }
 
 interface Expenses {
-  key: number;
+  _id: string;
   name: string;
   amount: number;
 }

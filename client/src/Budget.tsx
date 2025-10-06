@@ -18,15 +18,45 @@ const IncomeStream: React.FC<IncomeStreamProps> = ({ name, amount, frequency }) 
 };
 
 type ExpenseProps = {
+  _id: string;
   name: string;
   amount: number;
+  onRefresh?: () => void; // optional callback to refresh the list after deleting
 };
 
-const Expense: React.FC<ExpenseProps> = ({ name, amount }) => {
+const Expense: React.FC<ExpenseProps> = ({ _id, name, amount, onRefresh }) => {
+  // delete handler
+  async function handleDelete(expenseId: string, onRefresh?: () => void) {
+
+    try {
+      const response = await fetch(`http://localhost:5001/api/expenseDelete`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          expenseId,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to delete expense");
+
+      console.log("Expense deleted");
+
+      if (onRefresh) onRefresh(); // let parent refresh expense list
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <tr>
       <td>{name}</td>
       <td>${amount}</td>
+      <td>
+        <button onClick={() => handleDelete(_id, onRefresh)} className="bg-blue-500 text-white px-3 py-1 rounded">
+          Delete Expense
+        </button>
+      </td>
+      
     </tr>
   );
 };
@@ -109,7 +139,7 @@ const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onRe
         </thead>
         <tbody>
           {expenses.map((expense, index) => (
-            <Expense key={index} {...expense} />
+            <Expense key={index} {...expense} onRefresh={onRefresh}/>
           ))}
           <tr>
             <td>
