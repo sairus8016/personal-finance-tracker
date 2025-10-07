@@ -3,7 +3,7 @@ import BudgetType from './Budget';
 import './App.css';
 
 interface IncomeStreamProps {
-  key: number;
+  _id: string;
   name: string;
   frequency: number;
   amount: number;

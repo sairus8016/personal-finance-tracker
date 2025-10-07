@@ -72,6 +72,47 @@ router.get('/budget', async (req: Request, res: Response) => {
     }
 });
 
+// POST /api/incomes
+router.post("/incomes", async (req, res) => {
+  try {
+    const { name, amount, frequency, budgetId } = req.body;
+
+    if (!name || !budgetId) {
+      return res.status(400).json({ message: "Name and budgetId are required" });
+    }
+
+    const income = new IncomeModel({ name, amount, frequency, budgetId });
+    const savedIncome = await income.save();
+
+    res.status(201).json(savedIncome);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// POST /api/incomeDelete
+router.post("/incomeDelete", async (req, res) => {
+  try {
+    const { incomeId } = req.body;
+
+    if (!incomeId) {
+      return res.status(400).json({ message: "Missing incomeId" });
+    }
+
+    const deletedIncome = await IncomeModel.findByIdAndDelete(incomeId);
+
+    if (!deletedIncome) {
+      return res.status(404).json({ message: "Income not found" });
+    }
+
+    res.status(200).json({ message: "Income deleted", deletedIncome });
+  } catch (err) {
+    console.error("Error deleting income:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 // POST /api/expenses
 router.post("/expenses", async (req, res) => {
   try {
