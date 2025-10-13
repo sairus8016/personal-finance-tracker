@@ -177,6 +177,15 @@ const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onRe
 
   return (
     <div className="Budget">
+      <form>  {/*later add onSubmit handler*/}
+        <select>
+          <option value="1">Ben's Budget</option>
+          <option value="1">Ben's Budget</option>
+          <option value="1">Ben's Budget</option>
+          <option value="1">Ben's Budget</option>
+        </select>
+        <input type="submit" value="Go"></input>
+      </form>
       <h1>Monthly Budget</h1>
 
       <div>
@@ -193,38 +202,34 @@ const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onRe
             {incomeStreams.map((stream, index) => (
               <IncomeStream key={index} {...stream} onRefresh={onRefresh}/>
             ))}
-            <tr>
-            <td>
-              <form onSubmit={handleIncomeSubmit} className="flex gap-2 items-center">
-                <input
-                  type="text"
-                  placeholder="New income name"
-                  value={newIncomeName}
-                  onChange={changeNewIncomeName}
-                  className="border rounded px-2 py-1"
-                />
-                <input
-                  type="text"
-                  placeholder="New income value"
-                  value={newIncomeValue}
-                  onChange={changeNewIncomeValue}
-                  className="border rounded px-2 py-1"
-                />
-                <input
-                  type="text"
-                  placeholder="New frequency value"
-                  value={newFrequencyValue}
-                  onChange={changeNewFrequencyValue}
-                  className="border rounded px-2 py-1"
-                />
-                <button type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
-                  Add Income
-                </button>
-              </form>
-            </td>
-          </tr>
           </tbody>
         </table>
+        <form onSubmit={handleIncomeSubmit} className="flex gap-2 items-center">
+          <input
+            type="text"
+            placeholder="New income name"
+            value={newIncomeName}
+            onChange={changeNewIncomeName}
+            className="border rounded px-2 py-1"
+          />
+          <input
+            type="text"
+            placeholder="New income value"
+            value={newIncomeValue}
+            onChange={changeNewIncomeValue}
+            className="border rounded px-2 py-1"
+          />
+          <input
+            type="text"
+            placeholder="New frequency value"
+            value={newFrequencyValue}
+            onChange={changeNewFrequencyValue}
+            className="border rounded px-2 py-1"
+          />
+          <button type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
+            Add Income
+          </button>
+        </form>
       </div>
 
       <h2>Expenses</h2>
@@ -239,32 +244,28 @@ const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onRe
           {expenses.map((expense, index) => (
             <Expense key={index} {...expense} onRefresh={onRefresh}/>
           ))}
-          <tr>
-            <td>
-              <form onSubmit={handleSubmit} className="flex gap-2 items-center">
-                <input
-                  type="text"
-                  placeholder="New expense name"
-                  value={newExpenseName}
-                  onChange={changeNewExpenseName}
-                  className="border rounded px-2 py-1"
-                />
-                <input
-                  type="text"
-                  placeholder="New expense value"
-                  value={newExpenseValue}
-                  onChange={changeNewExpenseValue}
-                  className="border rounded px-2 py-1"
-                />
-                <button type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
-                  Add Expense
-                </button>
-              </form>
-            </td>
-          </tr>
         </tbody>
       </table>
 
+      <form onSubmit={handleSubmit} className="flex gap-2 items-center">
+        <input
+          type="text"
+          placeholder="New expense name"
+          value={newExpenseName}
+          onChange={changeNewExpenseName}
+          className="border rounded px-2 py-1"
+        />
+        <input
+          type="text"
+          placeholder="New expense value"
+          value={newExpenseValue}
+          onChange={changeNewExpenseValue}
+          className="border rounded px-2 py-1"
+        />
+        <button type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
+          Add Expense
+        </button>
+      </form>
       {/* Total Income: $4000/month<br />
       Total Expenses: $2180/month<br />
       Net Savings: $1820/month<br /> */}

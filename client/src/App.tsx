@@ -63,6 +63,7 @@ function App() {
 
   return (
     <div className="App">
+      <header>My Money Manager</header>
       {budget ? (
         <BudgetType budgetId={budgetId} incomeStreams={budget.incomeStreams} expenses={budget.expenses} onRefresh={fetchBudget} />
       ): (
