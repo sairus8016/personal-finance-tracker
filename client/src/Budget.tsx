@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 import './Budget.css';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 
 type IncomeStreamProps = {
   _id: string;
@@ -38,9 +43,9 @@ const IncomeStream: React.FC<IncomeStreamProps> = ({ _id, name, amount, frequenc
       <td>${amount}</td>
       <td>{frequency}</td>
       <td>
-        <button onClick={() => handleDelete(_id, onRefresh)} className="bg-blue-500 text-white px-3 py-1 rounded">
+        <Button variant="outlined" color="error" onClick={() => handleDelete(_id, onRefresh)} className="bg-blue-500 text-white px-3 py-1 rounded">
           Delete Income
-        </button>
+        </Button>
       </td>
     </tr>
   );
@@ -81,9 +86,9 @@ const Expense: React.FC<ExpenseProps> = ({ _id, name, amount, onRefresh }) => {
       <td>{name}</td>
       <td>${amount}</td>
       <td>
-        <button onClick={() => handleDelete(_id, onRefresh)} className="bg-blue-500 text-white px-3 py-1 rounded">
+        <Button variant="outlined" color="error" onClick={() => handleDelete(_id, onRefresh)} className="bg-blue-500 text-white px-3 py-1 rounded">
           Delete Expense
-        </button>
+        </Button>
       </td>
       
     </tr>
@@ -178,13 +183,17 @@ const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onRe
   return (
     <div className="Budget">
       <form>  {/*later add onSubmit handler*/}
-        <select>
-          <option value="1">Ben's Budget</option>
-          <option value="1">Ben's Budget</option>
-          <option value="1">Ben's Budget</option>
-          <option value="1">Ben's Budget</option>
-        </select>
-        <input type="submit" value="Go"></input>
+        {/* <InputLabel id="simple-select-label">Select Budget</InputLabel> */}
+        <Select
+          labelId="simple-select-label"
+          id="simple-select"
+          value={budgetId}
+          // onChange={handleChange}
+          label="Select Budget"
+        >
+          <MenuItem value={"68cdf096c35077c8f92b1f98"}>Ben's Budget</MenuItem>
+        </Select>
+        <Button variant="contained" type="submit" value="Go">Go</Button>
       </form>
       <h1>Monthly Budget</h1>
 
@@ -205,30 +214,36 @@ const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onRe
           </tbody>
         </table>
         <form onSubmit={handleIncomeSubmit} className="flex gap-2 items-center">
-          <input
+          <TextField
+            variant="outlined"
+            size="small"
             type="text"
             placeholder="New income name"
             value={newIncomeName}
             onChange={changeNewIncomeName}
             className="border rounded px-2 py-1"
           />
-          <input
+          <TextField
+            variant="outlined"
+            size="small"
             type="text"
             placeholder="New income value"
             value={newIncomeValue}
             onChange={changeNewIncomeValue}
             className="border rounded px-2 py-1"
           />
-          <input
+          <TextField
+            variant="outlined"
+            size="small"
             type="text"
             placeholder="New frequency value"
             value={newFrequencyValue}
             onChange={changeNewFrequencyValue}
             className="border rounded px-2 py-1"
           />
-          <button type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
+          <Button variant="contained" color="success" type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
             Add Income
-          </button>
+          </Button>
         </form>
       </div>
 
@@ -248,23 +263,27 @@ const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onRe
       </table>
 
       <form onSubmit={handleSubmit} className="flex gap-2 items-center">
-        <input
+        <TextField
+          variant="outlined"
+          size="small"
           type="text"
           placeholder="New expense name"
           value={newExpenseName}
           onChange={changeNewExpenseName}
           className="border rounded px-2 py-1"
         />
-        <input
+        <TextField
+          variant="outlined"
+          size="small"
           type="text"
           placeholder="New expense value"
           value={newExpenseValue}
           onChange={changeNewExpenseValue}
           className="border rounded px-2 py-1"
         />
-        <button type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
+        <Button variant="contained" color="success" type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
           Add Expense
-        </button>
+        </Button>
       </form>
       {/* Total Income: $4000/month<br />
       Total Expenses: $2180/month<br />

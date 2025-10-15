@@ -41,7 +41,7 @@
 }
 
 input[type="text"], input[type="number"] {
-  width: 125px;
+  /* width: 125px; */
 }
 
 td:nth-child(1) {
