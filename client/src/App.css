@@ -44,10 +44,18 @@ input[type="text"], input[type="number"] {
   /* width: 125px; */
 }
 
-td:nth-child(1) {
+table {
+  max-width: 800px;
+}
+
+td.nameCell {
   width: 280px;
 }
 
-td:nth-child(2) {
+td.amountCell {
   width: 80px;
+}
+
+td.utilCell {
+  width: 150px;
 }

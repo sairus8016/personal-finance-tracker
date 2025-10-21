@@ -5,6 +5,14 @@ import TextField from '@mui/material/TextField';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
 
 type IncomeStreamProps = {
   _id: string;
@@ -38,16 +46,16 @@ const IncomeStream: React.FC<IncomeStreamProps> = ({ _id, name, amount, frequenc
   }
   
   return (
-    <tr>
-      <td>{name}</td>
-      <td>${amount}</td>
-      <td>{frequency}</td>
-      <td>
+    <TableRow>
+      <TableCell className="nameCell">{name}</TableCell>
+      <TableCell className="amountCell">${amount}</TableCell>
+      <TableCell className="amountCell">{frequency}</TableCell>
+      <TableCell className="utilCell">
         <Button variant="outlined" color="error" onClick={() => handleDelete(_id, onRefresh)} className="bg-blue-500 text-white px-3 py-1 rounded">
           Delete Income
         </Button>
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 };
 
@@ -82,16 +90,15 @@ const Expense: React.FC<ExpenseProps> = ({ _id, name, amount, onRefresh }) => {
   }
 
   return (
-    <tr>
-      <td>{name}</td>
-      <td>${amount}</td>
-      <td>
+    <TableRow>
+      <TableCell className="nameCell">{name}</TableCell>
+      <TableCell className="amountCell">${amount}</TableCell>
+      <TableCell className="utilCell">
         <Button variant="outlined" color="error" onClick={() => handleDelete(_id, onRefresh)} className="bg-blue-500 text-white px-3 py-1 rounded">
           Delete Expense
         </Button>
-      </td>
-      
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 };
 
@@ -197,97 +204,133 @@ const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onRe
       </form>
       <h1>Monthly Budget</h1>
 
-      <div>
-        <h2>Income Streams:</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Amount</th>
-              <th>Frequency</th>
-            </tr>
-          </thead>
-          <tbody>
-            {incomeStreams.map((stream, index) => (
-              <IncomeStream key={index} {...stream} onRefresh={onRefresh}/>
-            ))}
-          </tbody>
-        </table>
-        <form onSubmit={handleIncomeSubmit} className="flex gap-2 items-center">
-          <TextField
-            variant="outlined"
-            size="small"
-            type="text"
-            placeholder="New income name"
-            value={newIncomeName}
-            onChange={changeNewIncomeName}
-            className="border rounded px-2 py-1"
-          />
-          <TextField
-            variant="outlined"
-            size="small"
-            type="text"
-            placeholder="New income value"
-            value={newIncomeValue}
-            onChange={changeNewIncomeValue}
-            className="border rounded px-2 py-1"
-          />
-          <TextField
-            variant="outlined"
-            size="small"
-            type="text"
-            placeholder="New frequency value"
-            value={newFrequencyValue}
-            onChange={changeNewFrequencyValue}
-            className="border rounded px-2 py-1"
-          />
-          <Button variant="contained" color="success" type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
-            Add Income
-          </Button>
-        </form>
-      </div>
+      <Grid container spacing={2}>
+        <Grid size={{ xs: 12, lg: 8}}>
+          <div>
+            <h2>Income Streams:</h2>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Frequency</TableCell>
+                  <TableCell>Util</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {incomeStreams.map((stream, index) => (
+                  <IncomeStream key={index} {...stream} onRefresh={onRefresh}/>
+                ))}
+              </TableBody>
+            </Table>
+            <form onSubmit={handleIncomeSubmit} className="flex gap-2 items-center">
+              <TextField
+                variant="outlined"
+                size="small"
+                type="text"
+                placeholder="New income name"
+                value={newIncomeName}
+                onChange={changeNewIncomeName}
+                className="border rounded px-2 py-1"
+              />
+              <TextField
+                variant="outlined"
+                size="small"
+                type="text"
+                placeholder="New income value"
+                value={newIncomeValue}
+                onChange={changeNewIncomeValue}
+                className="border rounded px-2 py-1"
+              />
+              <TextField
+                variant="outlined"
+                size="small"
+                type="text"
+                placeholder="New frequency value"
+                value={newFrequencyValue}
+                onChange={changeNewFrequencyValue}
+                className="border rounded px-2 py-1"
+              />
+              <Button variant="contained" color="success" type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
+                Add Income
+              </Button>
+            </form>
+          </div>
 
-      <h2>Expenses</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {expenses.map((expense, index) => (
-            <Expense key={index} {...expense} onRefresh={onRefresh}/>
-          ))}
-        </tbody>
-      </table>
+          <h2>Expenses</h2>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Amount</TableCell>
+                <TableCell>Util</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {expenses.map((expense, index) => (
+                <Expense key={index} {...expense} onRefresh={onRefresh}/>
+              ))}
+            </TableBody>
+          </Table>
 
-      <form onSubmit={handleSubmit} className="flex gap-2 items-center">
-        <TextField
-          variant="outlined"
-          size="small"
-          type="text"
-          placeholder="New expense name"
-          value={newExpenseName}
-          onChange={changeNewExpenseName}
-          className="border rounded px-2 py-1"
-        />
-        <TextField
-          variant="outlined"
-          size="small"
-          type="text"
-          placeholder="New expense value"
-          value={newExpenseValue}
-          onChange={changeNewExpenseValue}
-          className="border rounded px-2 py-1"
-        />
-        <Button variant="contained" color="success" type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
-          Add Expense
-        </Button>
-      </form>
-      {/* Total Income: $4000/month<br />
-      Total Expenses: $2180/month<br />
-      Net Savings: $1820/month<br /> */}
+          <form onSubmit={handleSubmit} className="flex gap-2 items-center">
+            <TextField
+              variant="outlined"
+              size="small"
+              type="text"
+              placeholder="New expense name"
+              value={newExpenseName}
+              onChange={changeNewExpenseName}
+              className="border rounded px-2 py-1"
+            />
+            <TextField
+              variant="outlined"
+              size="small"
+              type="text"
+              placeholder="New expense value"
+              value={newExpenseValue}
+              onChange={changeNewExpenseValue}
+              className="border rounded px-2 py-1"
+            />
+            <Button variant="contained" color="success" type="submit" className="bg-blue-500 text-white px-3 py-1 rounded">
+              Add Expense
+            </Button>
+          </form>
+        </Grid>
+        <Grid size={{xs: 12, lg: 4}}>
+          {/* Totals Section */}
+          <div className="totalsSection" style={{ marginTop: "2rem", padding: "1rem" }}>
+            {(() => {
+              // Calculate totals
+              const totalIncome = incomeStreams.reduce(
+                (sum, income) => sum + (income.amount || 0) * (income.frequency || 1),
+                0
+              );
+              const totalExpenses = expenses.reduce(
+                (sum, expense) => sum + (expense.amount || 0),
+                0
+              );
+              const netSavings = totalIncome - totalExpenses;
+
+              return (
+                <>
+                  <h2>Totals</h2>
+                  <p><strong>Total Income:</strong> ${totalIncome.toFixed(2)} / month</p>
+                  <p><strong>Total Expenses:</strong> ${totalExpenses.toFixed(2)} / month</p>
+                  <p
+                    style={{
+                      color: netSavings >= 0 ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <strong>Net Savings:</strong> ${netSavings.toFixed(2)} / month
+                  </p>
+                </>
+              );
+            })()}
+          </div>
+        </Grid>
+      </Grid>
     </div>
   );
 };
