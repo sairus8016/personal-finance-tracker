@@ -26,25 +26,55 @@ const router = Router();
 
 // POST save budget data
 router.post('/saveBudget', async (req: Request, res: Response) => {
-    const { incomeStreams, expenses } = req.body;
+    const { name } = req.body;
+    if (!name) return res.status(400).json({ error: "Budget name required."});
 
     try {
-        const budget = await BudgetModel.create({ name: "User Budget" });
+        const newBudget = new BudgetModel({
+          name,
+          incomeStreams: [],
+          expenses: [],
+        });
 
-        const incomePromises = incomeStreams.map((stream: any) =>
-            IncomeModel.create({ ...stream, budgetId: budget._id })
-        );
-        const expensePromises = expenses.map((expense: any) =>
-            ExpenseModel.create({ ...expense, budgetId: budget._id })
-        );
+        const saved = await newBudget.save();
 
-        await Promise.all([...incomePromises, ...expensePromises]);
-
-        res.status(201).json({ message: 'Budget saved successfully', budgetId: budget._id });
+        res.json(saved);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error saving budget data', error });
+        res.status(500).json({ message: 'Failed to create budget data', error });
     }
+});
+// router.post('/saveBudget', async (req: Request, res: Response) => {
+//     const { incomeStreams, expenses } = req.body;
+
+//     try {
+//         const budget = await BudgetModel.create({ name: "User Budget" });
+
+//         const incomePromises = incomeStreams.map((stream: any) =>
+//             IncomeModel.create({ ...stream, budgetId: budget._id })
+//         );
+//         const expensePromises = expenses.map((expense: any) =>
+//             ExpenseModel.create({ ...expense, budgetId: budget._id })
+//         );
+
+//         await Promise.all([...incomePromises, ...expensePromises]);
+
+//         res.status(201).json({ message: 'Budget saved successfully', budgetId: budget._id });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Error saving budget data', error });
+//     }
+// });
+
+// GET all budgets
+router.get('/budget/', async(req: Request, res: Response) => {
+  try {
+    const budgets = await BudgetModel.find({});
+    res.json(budgets);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch budgets."});
+  }
 });
 
 // GET budget by ID along with its income streams and expenses
@@ -60,16 +90,6 @@ router.get('/budget/:id', async (req: Request, res: Response) => {
     console.error(err);
     res.status(500).send('Server error');
   }
-});
-
-// Generic get budget (for testing)
-router.get('/budget', async (req: Request, res: Response) => {
-    try {
-        const budgets = await BudgetModel.findOne();
-        res.json(budgets);
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching budget data', error });
-    }
 });
 
 // POST /api/incomes

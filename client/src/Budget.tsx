@@ -189,8 +189,7 @@ const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onRe
 
   return (
     <div className="Budget">
-      <form>  {/*later add onSubmit handler*/}
-        {/* <InputLabel id="simple-select-label">Select Budget</InputLabel> */}
+      {/*<form>
         <Select
           labelId="simple-select-label"
           id="simple-select"
@@ -201,7 +200,7 @@ const Budget: React.FC<BudgetProps> = ({ budgetId, incomeStreams, expenses, onRe
           <MenuItem value={"68cdf096c35077c8f92b1f98"}>Ben's Budget</MenuItem>
         </Select>
         <Button variant="contained" type="submit" value="Go">Go</Button>
-      </form>
+      </form> */}
       <h1>Monthly Budget</h1>
 
       <Grid container spacing={2}>
