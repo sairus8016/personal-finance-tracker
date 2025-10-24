@@ -6,6 +6,8 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import { Card, CardContent, Typography, Stack, Collapse, IconButton } from "@mui/material";
+import { ExpandMore, ExpandLess } from "@mui/icons-material";
 import './App.css';
 
 interface IncomeStreamProps {
@@ -34,6 +36,10 @@ function App() {
   const [selectedBudget, setSelectedBudget] = useState<Budget | null>(null);  
   const [loading, setLoading] = useState<boolean>(true);
   const [newBudgetName, setNewBudgetName] = useState("");
+  const [expanded, setExpanded] = useState(!selectedBudgetId);
+  const selectedBudgetName =
+    budgets?.find((b) => b._id === selectedBudgetId)?.name || "No Budget Selected";
+
   // const budgetId = "68cdf096c35077c8f92b1f98"; // hardcoded for now
 
   // useEffect(() => {
@@ -124,34 +130,58 @@ function App() {
 
   return (
     <div className="App">
-      <header>My Money Manager</header>
-      {/* Select existing budget */}
-      <FormControl fullWidth style={{ marginBottom: "1rem" }}>
-        <InputLabel>Select Budget</InputLabel>
-        <Select
-          value={selectedBudgetId}
-          label="Select Budget"
-          onChange={(e) => setSelectedBudgetId(e.target.value)}
-        >
-          {budgets.map((b) => (
-            <MenuItem key={b._id} value={b._id}>
-              {b.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Card sx={{ maxWidth: 600, margin: "2rem auto", boxShadow: 3 }}>
+        <CardContent>
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6">
+              {expanded ? "Manage Budgets" : `Current Budget: ${selectedBudgetName}`}
+            </Typography>
+            <IconButton onClick={() => setExpanded(!expanded)}>
+              {expanded ? <ExpandLess /> : <ExpandMore />}
+            </IconButton>
+          </Stack>
 
-      {/* Create new budget */}
-      <form onSubmit={handleCreateBudget} style={{ display: "flex", gap: "1rem", marginBottom: "2rem" }}>
-        <TextField
-          label="New Budget Name"
-          value={newBudgetName}
-          onChange={(e) => setNewBudgetName(e.target.value)}
-        />
-        <Button variant="contained" color="primary" type="submit">
-          Create Budget
-        </Button>
-      </form>
+          <Collapse in={expanded}>
+            <Stack spacing={2} mt={2}>
+              <FormControl fullWidth>
+                <InputLabel>Select Existing Budget</InputLabel>
+                <Select
+                  value={selectedBudgetId || ""}
+                  label="Select Existing Budget"
+                  onChange={(e) => setSelectedBudgetId(e.target.value)}
+                >
+                  {budgets?.map((b) => (
+                    <MenuItem key={b._id} value={b._id}>
+                      {b.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <Typography variant="body2" color="textSecondary">
+                or create a new budget:
+              </Typography>
+
+              <Stack direction="row" spacing={1}>
+                <TextField
+                  label="New Budget Name"
+                  size="small"
+                  fullWidth
+                  value={newBudgetName}
+                  onChange={(e) => setNewBudgetName(e.target.value)}
+                />
+                <Button
+                  variant="contained"
+                  onClick={handleCreateBudget}
+                  sx={{ whiteSpace: "nowrap" }}
+                >
+                  Create
+                </Button>
+              </Stack>
+            </Stack>
+          </Collapse>
+        </CardContent>
+      </Card>
 
       {/* Budget content */}
       {loading ? (
